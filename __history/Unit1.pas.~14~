@@ -1,0 +1,82 @@
+unit Unit1;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Grids, ExtCtrls;
+
+type
+  TForm1 = class(TForm)
+    Button1: TButton;
+    Panel1: TPanel;
+    procedure Button1Click(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  Form1: TForm1;
+const
+  NMax = 301;
+implementation
+
+{$R *.dfm}
+function PRIMO(N:integer):boolean;
+var
+  c : integer;
+  P : boolean;
+begin
+  c := 1;
+  P := true;
+  if N <= 1 then
+    P := false
+  else
+    if N = 2 then
+      P := true
+    else
+      repeat
+        c := c + 1;
+        if N mod c = 0 then
+          P := false;
+      until (P=false)or(c>=trunc(sqrt(N)));
+  result := P;
+end;
+
+procedure ESPIRAL_SACKS(N:integer;var Panel:TPanel);
+var
+  i,F,C : word;
+  r,ang,x,y : real;
+begin
+  for i :=  1 to N*N do begin
+    r := sqrt(i);
+    ang := 2*pi*frac(sqrt(i));
+    x := r * cos(ang);
+    y := r * sin(ang);
+    F := N div 2 + 1 - trunc(y);
+    C := trunc(x) + N div 2 + 1;
+    if (F>=0)and(F<=N)and(C>=0)and(C<=N) then begin
+      Panel.Canvas.MoveTo(F,C);
+
+    end;
+
+  end;
+end;
+
+procedure TForm1.Button1Click(Sender: TObject);
+var
+  i,j,N:word;
+  A:matriz;
+begin
+  N := NMax;
+  with panel1 do begin
+    canvas.Pen.Color:=clBlack;
+    canvas.Pen.Width:=1;
+    canvas.Pen.Style:=psSolid;
+  end;
+  ESPIRAL_SACKS(N,Panel1);
+end;
+
+end.
